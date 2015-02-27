@@ -1,0 +1,21 @@
+{
+  "name": "node-exercises",
+  "version": "1.0.0",
+  "description": "make exercises in node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexaleluia12/node-exercises.git"
+  },
+  "author": "Alex Dias Aleluia",
+  "bugs": {
+    "url": "https://github.com/alexaleluia12/node-exercises/issues"
+  },
+  "homepage": "https://github.com/alexaleluia12/node-exercises",
+  "dependencies": {
+    "underscore": "^1.8.2"
+  }
+}
