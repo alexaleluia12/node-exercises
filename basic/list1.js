@@ -51,8 +51,12 @@ function test(got, expected){
   } else {
     prefix = ' X ';
   }
+  // wear util.inspect() to property print complex object
+  // the end result in much like Python
   var strOut = util.format('%s got: %s expected: %s', 
-                           prefix, got, expected);
+                           util.inspect(prefix),
+                           util.inspect(got),
+                           util.inspect(expected));
   console.log(strOut);
 }
 
