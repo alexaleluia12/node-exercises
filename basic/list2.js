@@ -25,6 +25,21 @@ function remove_adjacent(nums) {
   return newList;
 }
 
+
+//E
+function linear_merge(list1, list2) {
+  var newList = [];
+  list1.forEach(function(elemet) {
+    newList.push(elemet);
+  });  
+  list2.forEach(function(element) {
+    newList.push(element);
+  });
+  return un.sortBy(newList, function(element) {
+    return element;
+  });
+}
+
 function test(got, expected) {
   var prefix = '';
   if(un.isEqual(got, expected))
@@ -40,9 +55,18 @@ function test(got, expected) {
 
 function main() {
   console.log('remove_adjacent');
-  test(remove_adjacent([1,2,2,3]), [1,2,3]);
-  test(remove_adjacent([2,2,3,3,3]), [2,3]);
+  test(remove_adjacent([1, 2, 2, 3]), [1, 2, 3]);
+  test(remove_adjacent([2, 2, 3, 3, 3]), [2, 3]);
   test(remove_adjacent([]), []);
+  
+  console.log('');
+  console.log('linear_merge');
+  test(linear_merge(['aa', 'xx', 'zz'], ['bb', 'cc']),
+       ['aa', 'bb', 'cc', 'xx', 'zz']);
+  test(linear_merge(['aa', 'xx'], ['bb', 'cc', 'zz']),
+       ['aa', 'bb', 'cc', 'xx', 'zz']);
+  test(linear_merge(['aa', 'aa'], ['aa', 'bb', 'bb']),
+       ['aa', 'aa', 'aa', 'bb', 'bb']); 
 }
 
 if(require.main === module) 
