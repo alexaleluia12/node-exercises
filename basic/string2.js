@@ -20,6 +20,24 @@ function not_bad(string) {
   return string.replace(regex, 'good');
 }
 
+//F
+function front_back(a, b) {
+  function halves(string) {
+    var len = string.length, center;
+    if(len%2 === 0) {
+      center = len / 2;
+      return [string.slice(0, center), string.slice(center, len)];
+    } else {
+      center = (len/2) + 1;
+      return [string.slice(0, center), string.slice(center, len)];
+    }
+  }
+  var aHelve = halves(a);
+  var bHelve = halves(b);
+  return aHelve[0] + bHelve[0] + aHelve[1] + bHelve[1];
+  
+}
+
 function test(got, expected) {
   var prefix = '';
   if(un.isEqual(got, expected))
@@ -45,6 +63,12 @@ function main() {
   test(not_bad('This dinner is not that bad!'), 'This dinner is good!');
   test(not_bad('This tea is not hot'), 'This tea is not hot');
   test(not_bad("It's bad yet not"), "It's bad yet not");
+  
+  console.log('');
+  console.log('front_back');
+  test(front_back('abcd', 'xy'), 'abxcdy');
+  test(front_back('abcde', 'xyz'), 'abcxydez');
+  test(front_back('Kitten', 'Donut'), 'KitDontenut');
 }
 
 if(require.main === module) 
