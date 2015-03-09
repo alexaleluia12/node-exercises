@@ -1,19 +1,21 @@
 'use strict';
+
 var fs = require('fs');
 
-var un = require('underscore');
-
-// TODO
-// sorte the json before print
-// implement `print_top`
 
 function mapWords(arg) {
-  var len = arg.length, maped = {};
+  var len = arg.length, maped = {}, aWord, words = [];
   for(var i=0; i<len; i++){
-    var regex = /[-.',;:"!?\[\])(`]/g
-    var words = arg[i].replace(regex, ' ').split(' ');
+    if(arg[i].length === 0)
+      continue;
+    var regex = /[-.,;:'"!?\[\])(`\d]/g;
+    var space = /\s+/g;
+    aWord = arg[i].replace(regex, ' ');
+    words = aWord.replace(space, ' ').split(' ');
     var lenWords = words.length;
     for(var j=0; j<lenWords; j++){
+      if(words[j].length === 0)
+        continue;
       var element = words[j].toLowerCase();
       if(!(element in maped))
         maped[element] = 1;
@@ -24,13 +26,36 @@ function mapWords(arg) {
   return maped;
 }
 
+function sortByValue(arg) {
+  var newJson = {}, aux;
+  var len = Object.keys(arg).length;
+  
+  for(var i=0; i<len; i++){
+    var bigger = [0, 0], aux = 0;
+    for(var key in arg){
+      if((aux === 0 || arg[key] > bigger[1]) && !(key in newJson)){
+        bigger[0] = key;
+        bigger[1] = arg[key];
+      }
+      aux = 1;
+    }
+    newJson[bigger[0]] = bigger[1];
+  }
+  return newJson;
+}
+
 function show(arg, all) {
   if(!all){
     for(var i in arg)
       console.log(i + ' ' + arg[i]);
   }else {
-    for(var i=0; i<all; i++)
-      console.log(i + ' ' + arg[i]);
+    var count = 0;
+      for(var k in arg){
+        if(count === all)
+          break;
+        console.log(k + ' ' + arg[k]);
+        count += 1;
+      }
   }
 }
 
@@ -42,12 +67,25 @@ function print_words(filename) {
    , function(err, data) {
        if(err) throw err;
        mapedWords = mapWords(data.split('\n'));
-       show(mapedWords);
+       show(sortByValue(mapedWords));
   });
 }
 
-function main(first_argument) {
-  var option ='', filename = '';
+function print_top(filename) {
+  var mapedWords, range = 20;
+  fs.readFile(
+     filename
+   , {encoding:'utf-8'}
+   , function(err, data) {
+       if (err) throw err;
+       mapedWords = mapWords(data.split('\n'));
+       show(sortByValue(mapedWords), range);
+    }
+  );
+}
+
+function main() {
+  var option = '', filename = '';
   if(process.argv.length != 4){
     console.log('usage: node wordcount.js {--count | --topcount} file');
     process.exit(1);
@@ -67,7 +105,4 @@ function main(first_argument) {
 
 if(require.main === module)
   main();
-//  var lst = ['in or blue coll', 'in it or', 'sky in']
-//  var dict = mapWords(lst);
-//  show(dict);
   
