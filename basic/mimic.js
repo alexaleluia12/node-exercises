@@ -4,9 +4,6 @@ var fs = require('fs');
 
 var un = require('underscore');
 
-function mapNext(lst) {
-  
-}
 
 function stringToList(data) {
   var lines = [], line = [], len = 0, lst = [];
@@ -35,24 +32,36 @@ function mimic_dict(filename) {
   return dict;
 }
 
-function main() {
-  console.log(mimic_dict(process.argv[2]));
-//  var dict;
-//  if(process.argv.length !== 3){
-//    console.log('usage: node mimic.js file-to-read');
-//    process.exit(1);
-//  }
-//  dict = mimic_dict(process.argv[2]);
-//  print_mimic(dict, '');
+function print_mimic(dictMimic, word) {
+  var empty = {}, keyFirst = '';
+  for(var i in dictMimic){
+    keyFirst = i;
+    empty[i] = dictMimic[i];
+    break;
+  }
+  var toPrint = '';
+  for(var init=1; init<=200; init++){
+    if(!word || !(word in dictMimic)){
+      word = keyFirst;
+      toPrint = word;
+    } else {
+      word = un.sample(dictMimic[word]);
+      toPrint = word;
+    }
+    console.log(toPrint);
+  }
 }
 
-if(require.main === module){
-  main();
-//  var test = "hoje carlos dio kall numbero \n dkdk deun return terminal dendo\n parafernalha alugues projeto\n casa mal chado cerveja felicidade";
-//  var toCall = function toCall(value){
-//    valReturn.push(value);
-//  };
-//  var myDict = {}
-//  var re = throwWords(myDict, test, toCall);
-//  console.log(re);
+function main() {
+  var dict;
+  if(process.argv.length !== 3){
+    console.log('usage: node mimic.js file-to-read');
+    process.exit(1);
+  }
+  dict = mimic_dict(process.argv[2]);
+  print_mimic(dict, '');
 }
+
+if(require.main === module)
+  main();
+
