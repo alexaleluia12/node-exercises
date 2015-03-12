@@ -33,10 +33,9 @@ function mimic_dict(filename) {
 }
 
 function print_mimic(dictMimic, word) {
-  var empty = {}, keyFirst = '';
+  var keyFirst = '';
   for(var i in dictMimic){
     keyFirst = i;
-    empty[i] = dictMimic[i];
     break;
   }
   var toPrint = '';
