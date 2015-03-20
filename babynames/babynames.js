@@ -1,6 +1,9 @@
 'use strict';
 
 var fs = require('fs');
+var util = require('util');
+
+var un = require('underscore');
 
 /*
 Baby Names exercise
@@ -42,17 +45,31 @@ function extract_names(filename) {
     process.exit(1);
 
   function dealFile(err, data) {
-    var regex;
+    var regex, peoples = [], rank = '', orderPeople = [];
     regex = /<tr align="right"><td>(\d+)<\/td><td>(\w+)<\/td><td>(\w+)<\/td>/;
     if (err) throw err;
     data.split('\n').forEach(function(element) {
       var match = regex.exec(element);
-      if(match)
-        console.log(match[1] + ' ' + match[2] + ' ' + match[3]);
+      if(match){
+        rank = match[1];
+        peoples.push([match[2], rank]);
+        peoples.push([match[3], rank]);
+      }
     });
+    orderPeople = un.sortBy(peoples, function(element) {
+      return element[0];
+    });
+    peoples = null;
+    var len = orderPeople.length;
+    for(var i=0; i<len; i++){
+      lstSring.push(orderPeople[i][0] + ' ' +  orderPeople[i][1]);
+    }
+    return lstSring;
   }
 
 }
 
-if(require.main == module)
+if(require.main == module){
   extract_names(process.argv[2])
+}
+
