@@ -33,7 +33,7 @@ Suggested milestones for incremental development:
 
 */
 // A
-function extract_names(filename) {
+function extract_names(filename, callback) {
   var regexYear = /\d+/;
   var lstSring = [];
   var year = filename.match(regexYear);
@@ -64,12 +64,39 @@ function extract_names(filename) {
     for(var i=0; i<len; i++){
       lstSring.push(orderPeople[i][0] + ' ' +  orderPeople[i][1]);
     }
-    return lstSring;
+    callback(lstSring);
   }
+
+}
+// $ node bay.js filehtml.html  --summaryfile
+//     0   1          2             3
+function main() {
+  var filename = '';
+  function toPrintList(lst) {
+    lst.forEach(function(element) {
+      console.log(element);
+    });
+  }
+  function toSaveInFile(lst) {
+    var createFile = process.argv[3] ? true : false;
+    var nameNewFile = 'baby' + lst[0] + 'html.' + 'summary';
+    var stringData = lst.join('\n');
+    fs.writeFile(nameNewFile, stringData, function(err) {
+      if (err) throw err;
+    });
+  }
+  if(process.argv.length < 3){
+    console.log('usage: node babynames.js babyxxxx.html [--summaryfile]');
+    process.exit(1);
+  }
+  filename = process.argv[2];
+  if(process.argv[3])
+    extract_names(filename, toSaveInFile);
+  else
+    extract_names(filename, toPrintList);
 
 }
 
 if(require.main == module){
-  extract_names(process.argv[2])
+  main();
 }
-
